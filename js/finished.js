@@ -4,6 +4,7 @@
   let allYearsData = "no data";
   let svgScatterPlot = ""; 
   let svgLineGraph = "";
+  let toolDiv = "";
   let defualtValue = "AUS";
 
   window.onload = function () {
@@ -12,8 +13,11 @@
       .attr('width', 500)
       .attr('height', 500);
 
-    svgScatterPlot = d3.select("body")
-      .append('svg')
+    toolDiv = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
+    svgScatterPlot = toolDiv.append('svg')
       .attr('width', 520)
       .attr('height', 500);
 
@@ -23,6 +27,7 @@
         allYearsData = csvData;
         makeLineGraph(defualtValue);
       });
+    
   }
 
   function makeScatterPlot() {
@@ -40,7 +45,6 @@
       .text("All Countries");
   }
 
-  // make title and axes labels
   function makeLabels() {
     svgScatterPlot.append('text')
       .attr('x', 50)
@@ -119,9 +123,6 @@
   }
 
   function plotLineGraph(funcs, allCountry, country) {
-    let div = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
     let line = d3.line()
       .x((d) => funcs.x(d))
       .y((d) => funcs.y(d));
@@ -134,17 +135,17 @@
       .attr("stroke-width", 1.5)
       .attr("d", line)
           .on("mouseover", (d) => {
-          div.transition()
+          toolDiv.transition()
             .duration(100)
             .style("opacity", .9);
-          div
-            .style("left", (d3.event.pageX) + "px")
+          toolDiv
+            .style("left", (d3.event.pageX ) + "px")
             .style("top", (d3.event.pageY - 28) + "px");
-          makeScatterPlot();
+            makeScatterPlot();
         })
         .on("mouseout", (d) => {
-          div.transition()
-            .duration(200)
+          toolDiv.transition()
+            .duration(800)
             .style("opacity", 0);
         });
     svgLineGraph.append('text')
