@@ -1,1 +1,1 @@
-# info474-lab5
+# Assignment 6 Javascript
